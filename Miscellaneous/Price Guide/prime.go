@@ -1,9 +1,11 @@
 {{/*Use this command to prepare before starting to use the price guide or my crappy code will create more issues than a 3 y/o*/}}
 {{/*1. Pass this command to prepare*/}}
 {{/*2. Add the rest of the cc's*/}}
-{{/*3. Add the config values (the Role ID's of the admin and manager) in the Main command and !!addmod command.*/}}
+{{/*3. Add the config values in the Main command and !!addmod command.*/}}
 {{/*4. Remember to assign the manager role to people who will update prices, with the !!addmod command and not manually give them the role. Admins, you can do you and add the role manually.*/}}
 {{/*If this runs and returns "Done!", proceed with steps 2,3,4.*/}}
+
+{{/*Main command needs RoleID's of admin and manager, true/false if a second currency exists, Conversion rate (1 <Second_currency> = $denom <main_currency>), Name of second currency, an emoji as an icon of the second currency, and a cooldown on price updates (in seconds), as the configuration values.*/}}
 
 {{/*Properties:*}}
 {{/*1. This command - Trigger: prime, Trigger Type: command*/}}
