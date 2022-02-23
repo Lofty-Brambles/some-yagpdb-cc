@@ -12,14 +12,7 @@
     {{if eq $l 0}}{{$d = "`No items matched your search`"}}
     {{else if le $l 20}}{{range $it}}{{- $d = joinStr "" $d .}}{{end -}}
     {{else}}{{range $i, $e := $it}}{{- if and (ne $i 0) (eq (mod $i 20) 0.0)}}{{$pg = $pg.Append $d}}{{$d = $e}}{{else}}{{$d = joinStr "" $d $e}}{{end}}{{if eq $i (sub $l 1)}}{{$pg = $pg.Append $d}}{{$d = index $pg 0}}{{end}}{{end -}}{{end}}
-    {{$id := sendMessageRetID nil (cembed
-      "title" "Item Menu"
-      "description" (joinStr "" "Your search matched the following items:\n" $d)
-      "color" 0x2e3137
-      "footer" (sdict 
-        "text" "The search was conducted"
-        "icon_url" "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTtIcUVPAg3-QU2ptdXHNQ96Kxv0qKmIs1GSw&usqp=CAU")
-      "timestamp" currentTime)}}
+    {{$id := sendMessageRetID nil (cembed "title" "Item Menu" "description" (joinStr "" "Your search matched the following items:\n" $d) "color" 0x2e3137 "footer" (sdict "text" "The search was conducted" "icon_url" "https://bit.ly/3JKCscP") "timestamp" currentTime)}}
     {{if $pg}}{{dbSet 1 "pgtemp" (cslice $pg 1 $id)}}{{addMessageReactions nil $id "◀️" "▶️"}}{{end}}
     {{end}}
  
@@ -47,10 +40,10 @@
     {{$disprice := humanizeThousands $price}}
     {{$lmc := div (round (mult (div $price $denom) 100)) 100}}
     {{$dislmc := slice (printf "%f" (mod $lmc 1) ) 1 4 | printf "%s%s" (humanizeThousands $lmc)}}{{$desc := ""}}
-    {{$addin := ""}}{{if $scur}}{{$addin = joinStr "" "`\n> The Price of this item in" $c2name "is: " $emoji "`" $dislmc "`"}}{{end}}
+    {{$addin := ""}}{{if $scur}}{{$addin = joinStr "" "`\n> The Price of this item in " $c2name " is: " $emoji "`" $dislmc "`"}}{{end}}
     {{if ($item.Get "out")}}{{$desc = "> This Item is outdated. Sorry!"}}
     {{else}}{{$desc = (joinStr "" "> The Price of this item is: <:Monei:944250681357926430>`" $disprice $addin)}}{{end}}
-    {{sendMessage nil (cembed "title" ($item.Get "item") "thumbnail" (sdict "url" ($item.Get "tn")) "author" (sdict "name" (joinStr "" "Last Updated by: " ((userArg ($item.Get "last")).Username)) "icon_url" ((userArg ($item.Get "last")).AvatarURL "256")) "color" 0x2e3137 "description" $desc "footer" (sdict "text" "This was last updated" "icon_url" "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSSxT0Ijpukly2AjlyBKh0bjB3YFJZzoEtk1g&usqp=CAU") "timestamp" ($item.Get "update"))}}{{end}}{{end}}
+    {{sendMessage nil (cembed "title" ($item.Get "item") "thumbnail" (sdict "url" ($item.Get "tn")) "author" (sdict "name" (joinStr "" "Last Updated by: " ((userArg ($item.Get "last")).Username)) "icon_url" ((userArg ($item.Get "last")).AvatarURL "256")) "color" 0x2e3137 "description" $desc "footer" (sdict "text" "This was last updated" "icon_url" "https://bit.ly/356aGsm") "timestamp" ($item.Get "update"))}}{{end}}{{end}}
  
   {{if eq $c "update"}}
 {{if not (hasRoleID $mod)}}
@@ -114,11 +107,11 @@
   {{end}}{{end}}{{end}}
   
 {{if eq $c "help"}}
-  {{$desc := "\n\n➼ `!!find <Item name>/<Regex>`\n <:SubMenu:944115521794764800>Use this command to look up the ID of the item whose price you want to know.\n\n➼ `!!price <Item ID>`\n <:SubMenu:944115521794764800>Use this command to look up an Item's price using it's ID"}}{{$foot := sdict "text" "Member Help Menu" "icon_url" "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJzQlzB7bstVfu0_YvU5paPv8BZ6_7deA-v66B-JMnKLhqSJKorrZHiJo&s=10"}}
+  {{$desc := "\n\n➼ `!!find <Item name>/<Regex>`\n <:SubMenu:944115521794764800>Use this command to look up the ID of the item whose price you want to know.\n\n➼ `!!price <Item ID>`\n <:SubMenu:944115521794764800>Use this command to look up an Item's price using it's ID"}}{{$foot := sdict "text" "Member Help Menu" "icon_url" "https://bit.ly/3h7fYWW"}}
   {{if (hasRoleID $mod)}}
-  {{$desc = joinStr "" $desc "\n\n➼ `!!update <Item ID> <Price>`\n <:SubMenu:944115521794764800>Use this command to update the price of an Item.\n\n➼ `!!outdate <Item ID> <true/false>`\n <:SubMenu:944115521794764800>Use this command to mark an item as __outdated__ or remove it's outdated status"}}{{$foot = sdict "text" "Moderator Help Menu" "icon_url" "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYIZUq5Z_s7Lzt7cDZdlWqJrgR-iYA4_pvlA&usqp=CAU"}}{{end}}
+  {{$desc = joinStr "" $desc "\n\n➼ `!!update <Item ID> <Price>`\n <:SubMenu:944115521794764800>Use this command to update the price of an Item.\n\n➼ `!!outdate <Item ID> <true/false>`\n <:SubMenu:944115521794764800>Use this command to mark an item as __outdated__ or remove it's outdated status"}}{{$foot = sdict "text" "Moderator Help Menu" "icon_url" "https://bit.ly/3BX4iQx"}}{{end}}
   {{if (hasRoleID $admin)}}
-    {{$desc = joinStr "" $desc "\n\n➼ `!!add  <Cost> <Picture URL> <Name>`\n <:SubMenu:944115521794764800>Use this command to add an item to the price guide.\n\n➼ `!!remprice <Item ID>`\n <:SubMenu:944115521794764800>Use this command to remove the last price of an item.\n\n➼ `!!remlastitem`\n <:SubMenu:944115521794764800>Use this command to remove the last item added to the price guide."}}{{$foot = sdict "text" "Admin Help Menu" "icon_url" "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSmgFFT3MevDKgSHTB0i0TdXgy4UklC3nmIMQ&usqp=CAU"}}
+    {{$desc = joinStr "" $desc "\n\n➼ `!!add  <Cost> <Picture URL> <Name>`\n <:SubMenu:944115521794764800>Use this command to add an item to the price guide.\n\n➼ `!!remprice <Item ID>`\n <:SubMenu:944115521794764800>Use this command to remove the last price of an item.\n\n➼ `!!remlastitem`\n <:SubMenu:944115521794764800>Use this command to remove the last item added to the price guide."}}{{$foot = sdict "text" "Admin Help Menu" "icon_url" "https://bit.ly/3BMBU3d"}}
   {{end}}
   {{sendMessage nil (cembed "title" "Help Menu" "author" (sdict "name" .User.Username "icon_url" (.User.AvatarURL "256")) "footer" $foot "color" 0x2e3137 "description" $desc)}}{{end}}
 {{end}}
