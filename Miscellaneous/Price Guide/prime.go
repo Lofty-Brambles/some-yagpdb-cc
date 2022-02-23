@@ -13,6 +13,7 @@
 
 {{dbSet 0 "id-slice" (cslice)}}
 {{dbSet 1 "lastpos" 1}}
+
 {{/* Make sure, that the UserID's of 420 and 421 have a all key's empty in the database*/}}
 {{/*It also uses 1 key off the UserID of the user, so make sure to allocate that.*/}}
 
