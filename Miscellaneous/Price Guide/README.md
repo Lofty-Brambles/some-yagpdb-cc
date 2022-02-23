@@ -14,6 +14,18 @@ This is a basic 'fetch price' 'Item to price' guide that supports a singular cur
 - Has the ability to remove the last item added to the guide, in case of errors while adding.
 - Has the ability to remove the last price added to an item and resolve the previous price, in case of any errors while updating.
 - Has seperate Help Menus for Members, Managers and Admins.
+## Setup
+- Add the [Prime](prime.go) file. It has all the triggers and trigger types for the custom commands in it.
+- Run `-prime` once and delete the custom command.
+- Add the other three files and configure them.
+  - Configuration in [addmod command](addmod.go): Add the Role ID of the manager/moderator role. They can update/outdate items.
+  - Configuration in [Main command](main-command.go): 
+    - Add the Role ID's of Manager and Admins.
+    - Keep `$scur` as `true` if you want to have prices in a second currency as well. Else change it to `false` and skip the next point. [__1 Second Currency = X Main currency__]
+    - If you have a second currency, add the value of X in `$denom`, The name of the second currency in `$c2name` and an emoji relating to the second currency in `$emoji`.
+    - Add the cooldown to update prices for each manager in seconds in `$cd`. Default provided is 6 hours = 21600 seconds.
+  - The [Reaction Handler](reaction-handler.go) has no configuration necessity.
+- You can now start adding items and using the price guide.
 ## Gallery
 - __The `!!find all` command__
 
