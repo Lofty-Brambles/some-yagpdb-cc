@@ -1,5 +1,7 @@
 {{$admin := 944551206536245258}}
 {{$mod := 944551072452730951}}
+{{$scur := true}}{{$denom := 27000}}{{$c2name := "LMC"}}{{$emoji := "🍉"}}
+{{$cd := 21600}}
 {{if ge (len .CmdArgs) 1}}{{$c := (index .CmdArgs 0|lower)}}
   {{if eq $c "find"}}
     {{$args := parseArgs 2 "Usage: `!!find  <Item name>`" (carg "string" "") (carg "string" "regex")}}
@@ -43,10 +45,11 @@
     {{$item := index (dbGet 420 $key).Value $place}}{{$pslice := $item.Get "cost"}}
     {{$price := div (round (mult (div (add (index $pslice 0) (index $pslice 1) (index $pslice 2)) 3) 100)) 100}}
     {{$disprice := humanizeThousands $price}}
-    {{$lmc := div (round (mult (div $price 27000) 100)) 100}}
+    {{$lmc := div (round (mult (div $price $denom) 100)) 100}}
     {{$dislmc := slice (printf "%f" (mod $lmc 1) ) 1 4 | printf "%s%s" (humanizeThousands $lmc)}}{{$desc := ""}}
+    {{$addin := ""}}{{if $scur}}{{$addin = joinStr "" "`\n> The Price of this item in" $c2name "is: " $emoji "`" $dislmc "`"}}{{end}}
     {{if ($item.Get "out")}}{{$desc = "> This Item is outdated. Sorry!"}}
-    {{else}}{{$desc = (joinStr "" "> The Price of this item is: <:Monei:944250681357926430>`" $disprice "`\n> The Price of this item in LMC is: <:LargeCrateofMelons:943816860879716362>`" $dislmc "`")}}{{end}}
+    {{else}}{{$desc = (joinStr "" "> The Price of this item is: <:Monei:944250681357926430>`" $disprice $addin)}}{{end}}
     {{sendMessage nil (cembed "title" ($item.Get "item") "thumbnail" (sdict "url" ($item.Get "tn")) "author" (sdict "name" (joinStr "" "Last Updated by: " ((userArg ($item.Get "last")).Username)) "icon_url" ((userArg ($item.Get "last")).AvatarURL "256")) "color" 0x2e3137 "description" $desc "footer" (sdict "text" "This was last updated" "icon_url" "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSSxT0Ijpukly2AjlyBKh0bjB3YFJZzoEtk1g&usqp=CAU") "timestamp" ($item.Get "update"))}}{{end}}{{end}}
  
   {{if eq $c "update"}}
@@ -63,7 +66,7 @@
   {{$count := (index $item $place).Get "cost"}}
   {{$temp := (slice $count 1).Append ($args.Get 2)}}{{$save := index $count 0}}
   {{$reres := $res.Set $place $save}}
-  {{$s := (index $item $place).Set "cost" $temp}}{{$s := (index $item $place).Set "update" currentTime}}{{$s := (index $item $place).Set "last" .User.ID}}{{$p := (dbGet .User.ID "update").Value}}{{$s := $p.Set (toString $a) (add currentTime.Unix 21600)}}
+  {{$s := (index $item $place).Set "cost" $temp}}{{$s := (index $item $place).Set "update" currentTime}}{{$s := (index $item $place).Set "last" .User.ID}}{{$p := (dbGet .User.ID "update").Value}}{{$s := $p.Set (toString $a) (add currentTime.Unix $cd)}}
   {{dbSet 420 $key $item}}{{dbSet 421 $key $res}}{{dbSet .User.ID "update" $p}}
   {{sendMessage nil (joinStr "" "The item has been updated!\nLook it up with the command: `!!price " ($args.Get 1) "`")}}{{end}}{{end}}{{end}}
  
