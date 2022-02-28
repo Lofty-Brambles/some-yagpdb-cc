@@ -1,0 +1,30 @@
+{{/* Trigger Type: Command, Trigger: adminaddcmdreply */}}
+{{/* Adds the replies to the ;con and ;cave commands */}}
+{{$conGoodReplies := cslice
+ ""
+ ""
+ ""
+ ""
+ ""}}
+{{$conBadReplies := cslice
+ ""
+ ""
+ ""
+ ""
+ ""}}
+{{$caveGoodReplies := cslice
+ ""
+ ""
+ ""
+ ""
+ ""}}
+{{$caveBadReplies := cslice
+ ""
+ ""
+ ""
+ ""
+ ""}}
+{{dbSet 123 "conpassreply" $conGoodReplies}}
+{{dbSet 123 "confailreply" $conBadReplies}}
+{{dbSet 123 "cavepassreply" $caveGoodReplies}}
+{{dbSet 123 "cavefailreply" $caveBadReplies}}
