@@ -1,7 +1,9 @@
+{{/*Config*/}}
 {{$admin := 944551206536245258}}
 {{$mod := 944551072452730951}}
 {{$scur := true}}{{$denom := 27000}}{{$c2name := "LMC"}}{{$emoji := "🍉"}}
 {{$cd := 21600}}
+{{/*Code*/}}
 {{if ge (len .CmdArgs) 1}}{{$c := (index .CmdArgs 0|lower)}}
   {{if eq $c "find"}}
     {{$args := parseArgs 2 "Usage: `!!find  <Item name>`" (carg "string" "") (carg "string" "regex")}}
