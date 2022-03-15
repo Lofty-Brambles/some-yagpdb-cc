@@ -4,15 +4,15 @@
      Repository: https://github.com/Lofty-Brambles/some-yagpdb-cc */}}
 
 {{/*Configurable Values*/}} 
-{{$anon := true}}
-{{$neutral := true}}
+{{$anon := false}}
 {{$up := "a:Tick:947957018675781662"}}{{$down := "a:Cross:947957187928526868"}}{{$neutral := "neutral:780024034468691968"}}
 {{$agenda := "Something"}}
 {{$modRoles := cslice 123 456}}
 {{$log := sdict "approve" "935519890138361896" "implement" "935519890138361896" "deny" "935519890138361896" "delete" "935519890138361896"}}
 {{$cooldown := 10}}
-{{$userperm := sdict "edit" false "delete" false}}
+{{$userperm := sdict "edit" true "delete" true}}
 {{$prefix := `\-`}}{{/*Must be escaped*/}}
+{{$count := toString 123}}
 {{/*End of Configurable Values*/}}
  
 {{deleteTrigger 0}}
@@ -148,13 +148,13 @@
 		{{addMessageReactions nil $id $up}}
 		{{if $neutral}}{{addMessageReactions nil $id $neutral}}{{end}}
 		{{addMessageReactions nil $id $down}}
-		{{$hid := reFind `-a(?:nonymous)` .Message.Content}}
+		{{$hid := reFind `\b-anonymous\b` .Message.Content}}
 		{{if $hid}}
-			{{$cont = reReplace `-a(?:nonymous)?` .Message.Content ""}}
+			{{$cont = reReplace `\b-anonymous\b` .Message.Content ""}}
 		{{else}}
 			{{$cont = .Message.Content}}
 		{{end}}
-		{{$em.Set "description" (print "> **" $agenda " | Suggestion #" (dbIncr 619 "suggest-count" 1) "**\n" $cont)}}
+		{{$em.Set "description" (print "> **" $agenda " | Suggestion #" (dbIncr 619 $count 1) "**\n" $cont)}}
 		{{if and $anon $hid}}
 			{{$em.Set "author" (sdict "name" "Anonymous" "icon_url" "https://static.thenounproject.com/png/302770-200.png")}}
 		{{else}}
