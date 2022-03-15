@@ -1,6 +1,9 @@
 # A Hassle-less Multi-Suggestion System
 I've rarely seen a multi-channel suggestion system where you can have more than one parallel suggestion channels for more than one branch of a server.
 This CC aims to cover those issues.
+## Further Plans
+- [ ] Add a Main Channel CC to fetch and manage suggestions across all channels.
+- [ ] Add a Reaction Handler to manage highly upvoted suggstions and so on.
 ## Database Usage
 - `One Universal Key` [User-ID: 619, Key: Channel ID] for every Suggestion channel.
 - `One User Key per user`, per Suggestion channel. This can be avoided, and is explained later, [during setup](#setup).
