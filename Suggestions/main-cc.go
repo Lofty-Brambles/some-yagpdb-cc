@@ -1,4 +1,8 @@
-{{/*Trigger Type: Regex; Trigger: \A*/}}
+{{/* Trigger Type: Regex; Trigger: \A
+     Copyright: Lofty | Brambles, 2021
+     License: MIT
+     Repository: https://github.com/Lofty-Brambles/some-yagpdb-cc */}}
+
 {{/*Configurable Values*/}} 
 {{$anon := true}}
 {{$neutral := true}}
