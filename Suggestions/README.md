@@ -24,5 +24,5 @@ This CC aims to cover those issues.
   - If you want there to be a cooldown for users to be able to suggest, add it in `{{$cooldown}}` in __seconds__. This can also be kept as 0, and a cooldown can be added in the channel settings. No cooldown is not recommended, to avoid spammers/trolls.
   - If you wanted anonymous suggestions, make it `{{$userperm := sdict "edit" false "delete" false}}`. Otherwise, you can let users edit/delete suggestions by keeping them as true.
   - Add your wanted prefix in `{{$prefix}}`, keeping in mind, to escape it, if it is a special character. Remember, this prefix is only necessary for management of suggestions and not the suggestions themself.
-  - Add the Channel ID you have in {{$count}}`.
+  - Add the Channel ID you have in `{{$count}}`.
 - You should be ready to go!
