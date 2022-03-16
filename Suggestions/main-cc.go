@@ -104,7 +104,6 @@
 			{{if $mod}}
 				{{if $reason}}
 					{{$newem.Set "Description" (print ($newem.Get "Description") "\n\n**This Suggestion was marked as a Dupe!**\n__Reason:__\n" $reason)}}
-					{{sendDM (complexMessage "content" (print "") "embed" (cembed $newem))}}
 					{{deleteMessage nil $id}}
 				{{else}}
 					{{$er = "Please provide a proper reason to mark this as dupe!"}}
