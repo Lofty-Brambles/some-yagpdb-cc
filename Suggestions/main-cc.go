@@ -35,7 +35,7 @@
 		{{$newem := $data.Get "em"}}
 		{{$reason := ""}}
 		{{if gt (len .CmdArgs) 2}}
-			{{range (slice .CmdArgs 2)}}{{- $reason = print $reason .}}{{end}}
+			{{range (slice .CmdArgs 2)}}{{- $reason = print $reason . " "}}{{end}}
 		{{end}}
 		{{$act := (reFind `(approve|implement|deny|comment|dupe|edit|delete)` (index .CmdArgs 0) | lower)}}
 		{{if eq $act "approve"}}
@@ -103,8 +103,8 @@
         {{else if eq $act "dupe"}}
 			{{if $mod}}
 				{{if $reason}}
-					{{$newem.Set "Description" (print ($newem.Get "Description") "\n\n**This Suggestion was marked as a Dupe!**\n__Reason:__\n" $reason)}}
-					{{deleteMessage nil $id}}
+				{{$newem.Set "Description" (print ($newem.Get "Description") "\n\n**This Suggestion was marked as a Dupe!**\n__Reason:__\n" $reason)}}
+				{{deleteMessage nil $id}}
 				{{else}}
 					{{$er = "Please provide a proper reason to mark this as dupe!"}}
 				{{end}}
