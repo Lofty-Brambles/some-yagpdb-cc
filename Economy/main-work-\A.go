@@ -40,12 +40,12 @@
   {{if reFind $tempor (lower .Message.Content)}}
   
    {{if lt currentTime.Unix (toInt $dbcool)}}
-    {{$embed.Set "description" (print "<a:Cross:947957187928526868> You are still on cooldown for this command.\nYou will be able to use this command in <t:" $dbcool ":R>.")}}
+    {{$embed.Set "description" (print "<a:Cross:947957187928526868> You are still on cooldown for this command.\nYou will be able to use this command <t:" $dbcool ":R>.")}}
     {{$embed.Set "color" 16711680}}
     {{sendMessage nil (cembed $embed)}}
    {{else}}
   
-   {{$task := index (cslice "Passing the code" "Word Wants" "Number me right" "Introvert's Dilemma") (randInt 4)}}{{$task = "Word Wants"}}
+   {{$task := index (cslice "Passing the code" "Word Wants" "Number me right" "Introvert's Dilemma") (randInt 4)}}
    {{$gtemp := cslice "Achatina" "Angler" "Araneo" "Ammonite" "Beelzebufo" "Castoroides" "Carnotaurus" "Carbonemy" "Cnidaria" "Compy" "Daeodon" "Direwolf" "Diplodocus" "Eurypterid" "Gallimimus" "Ickthyosaurus" "Iguanadon" "Jerboa" "Kairuku" "Lystrosaurus" "Mammoth" "Megaloceros" "Megalodon" "Meganeura" "Megatherium" "Moschop" "Otter" "Oviraptor" "Parasaur" "Pelagornis" "Phiomia" "Piranha" "Purlovia" "Quetzal" "Raptor" "Sabertooth" "Tapejara" "Titanoboa" "Triceratops" "Trilobite" "Troodon" "Unicorn"}}
    {{$embed.Set "title" (print "Work - " $task)}}{{$resp := ""}}
    
@@ -57,6 +57,7 @@
     {{$coderxt := print "https://api.memegen.link/images/custom/_/" $code ".png?background=" $randBG}}
     {{$embed.Set "image" (sdict "url" $coderxt)}}{{$resp = lower $code}}
     {{sendMessage nil (cembed $embed)}}
+    {{$resp = print `(?i)` $code}}
     {{dbSetExpire .User.ID "workResp" $resp $cd1}}
     {{scheduleUniqueCC .CCID nil $cd1 (print "timed" .User.ID) 1}}
     
