@@ -12,6 +12,6 @@ So, this collection of CC's is an economy with a huge amount of modifiable ends.
 - `;use` uses a said item. 3 default actions on the use of an item are already provided with a placeholder. __Main modifiable CC__
 - `;help` just provides help. __The reaction handler is NOT tested.__
 # Comments.
-This is just a prefab for any huge economy you might want to create with Yagpdb. Highly open-ended and up to you to decide. The code can be buggy, so don't come after me. 
+This is just a prefab for any huge economy you might want to create with Yagpdb. Highly open-ended and up to you to decide. The code can be buggy, so don't come after me. It's recommended to restrict it to a few channels, just in case things go south.
 Hopefully this helped you. 
 Have a good day!
