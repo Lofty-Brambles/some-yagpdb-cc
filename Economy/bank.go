@@ -64,7 +64,7 @@
                 {{end}}
             {{else if reFind `(?i)all` ($args.Get 1)}}
                 {{$amt := $bal}}
-                {{if le (add $bal ($dash.Get "bbal") $bal) ($dash.Get "bquota")}}
+                {{if le (add $bal ($dash.Get "bbal")) ($dash.Get "bquota")}}
                     {{$amt = toInt $bal}}
                     {{$embed.Set "description" (print "An amount of " $ci "`" $amt "` was transferred from your pocket balance to your bank account.\n> **New Bank Balance**: " $ci "`" (add $amt ($dash.Get "bbal")) "` / `" (humanizeThousands ($dash.Get "bquota")) "`")}}
                     {{dbSet .User.ID "bal" 0}}
