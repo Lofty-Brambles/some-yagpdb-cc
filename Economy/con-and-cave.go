@@ -59,7 +59,7 @@
         {{$val := $inc.Get (print $inp $bin)}}
  
         {{$earn = print "You lose " $ci (toInt $val)}}
-        {{$reset := sub (dbGet .User.ID "bal").Value (toInt $val)}}
+        {{$reset := sub (dbGet .User.ID "bal").Value (toInt $val) | toFloat}}
         
         {{if lt $reset 0.00}}
             {{$reset = 0}}
