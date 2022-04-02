@@ -1,4 +1,4 @@
-# A Hassle-less Multi-Suggestion System
+# A Hassle-free Multi-Suggestion System
 I've rarely seen a multi-channel suggestion system where you can have more than one parallel suggestion channels for more than one branch of a server.
 This CC aims to cover those issues.
 ## Further Plans
@@ -12,7 +12,7 @@ This CC aims to cover those issues.
 - Anonymous user suggestion abililties. If disabled, doesn't allow user to edit/delete suggestions.
 - Custom Upvote, Downvote and Neutral emojis.
 - Allows management to approve, implement, deny, comment, edit, delete and mark suggestions as duplicates.
-- Allows logging of approved, implemented, denied or deleted comments.
+- Allows logging of approved, implemented, denied, duped or deleted suggestions or comments.
 - Allows custom cooldowns on suggestions.
 ## Setup
 - For one suggestion channel, make a Custom Command, and select the correct trigger type and trigger.
