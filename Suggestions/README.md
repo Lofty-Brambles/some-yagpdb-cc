@@ -9,7 +9,7 @@ This CC aims to cover those issues.
 - `One User Key per user`, per Suggestion channel. This can be avoided, and is explained later, [during setup](#setup).
 ## Features
 - Multiple and seperate suggetion channels, with no hassle of prefixes for the general user.
-- Anonymous user suggestion abililties. If disabled, allows user to edit/delete suggestions.
+- Anonymous user suggestion abililties. If disabled, doesn't allow user to edit/delete suggestions.
 - Custom Upvote, Downvote and Neutral emojis.
 - Allows management to approve, implement, deny, comment, edit, delete and mark suggestions as duplicates.
 - Allows logging of approved, implemented, denied or deleted comments.
