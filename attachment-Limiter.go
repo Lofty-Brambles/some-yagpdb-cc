@@ -1,3 +1,8 @@
+{{/* Trigger Type: Regex (Channel Restricted); Trigger: \A
+	 Copyright: Lofty | Brambles, 2021
+	 License: MIT
+	 Repository: https://github.com/Lofty-Brambles/some-yagpdb-cc */}}
+
 {{/* Config starts */}}
 
 {{ $emojis := cslice "🚒"}}{{/* If you want to add emojis, add them. If not, keep empty. */}}
