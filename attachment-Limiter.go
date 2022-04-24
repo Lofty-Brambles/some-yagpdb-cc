@@ -1,4 +1,5 @@
-{{/* Trigger Type: Regex (Channel Restricted); Trigger: \A
+{{/* 
+         Trigger Type: Regex (Channel Restricted); Trigger: \A
 	 Copyright: Lofty | Brambles, 2021
 	 License: MIT
 	 Repository: https://github.com/Lofty-Brambles/some-yagpdb-cc */}}
