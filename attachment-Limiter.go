@@ -13,7 +13,7 @@
 {{/* Config ends */}}
 
 {{/* Setting variables */}}
-{{ $count := 0 }}{{ $messageObj := getMessage nil .Message.ID }}
+{{ $count := 0 }}{{ $messageObj := .Message }}
 {{ $del := false }}{{ $role := "0" }}
 
 {{/* Fetching attachments */}}
