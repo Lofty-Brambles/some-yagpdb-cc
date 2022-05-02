@@ -1,0 +1,94 @@
+{{/*Trigger type: Regex; Trigger: \A(?i);\s*q(?:uest)?(?: +|\z) */}}
+{{if not .ExecData}}
+	{{if .CmdArgs}}
+		{{if reFind `(?i)start` ( index .CmdArgs 0 )}}
+			{{if $db := ( dbGet .User.ID "Quest" ).Value}}
+				{{if eq $db "Pending"}}
+					{{$quests := cslice
+						( sdict "diff" "Easy" "title" "" "desc" "" "img" "" "time" "" )
+					}}
+					{{$select := index ( shuffle $quests ) 0}}
+					{{$time := ( $select.Get "time" | toInt | add currentTime.Unix )}}
+					{{$em := sdict 
+						"title" ( print ( $select.Get "title" ) " | [" ( $select.Get "diff" ) " quest]" )
+						"description" ( print "> __🌎 | The Quest | 🌎__\n" ( $select.Get "desc" ) "\n> **The Time left:** <t:" $time ":R>\nGood Luck!" )
+						"footer" ( sdict "text" "REMEMBER to send a screenshot for completing the quest!" )
+						"image" ( sdict "url" ( $select.Get "img" ) )
+						"color" 0x2e3137
+					}}
+					{{sendMessage nil ( cembed $em )}}
+					{{dbSetExpire .User.ID "Quest" $em ( $select.Get "time" | toInt )}}
+					{{execCC .CCID nil ( $select.Get "time" | toInt ) (sdict "ID" .User.ID)}}
+				{{else}}
+					{{sendMessage nil ( print .User.Mention ", you have a quest active!\nGo to your quest channel and do `;quest show` to view it again." )}}
+				{{end}}
+			{{else}}
+				{{sendMessage nil ( print .User.Mention ", you either have a quest, pending review, or need to get one!\nYou can get a quest from a quest map from the shop!")}}
+			{{end}}
+		{{else if reFind `(?i)show` ( index .CmdArgs 0 )}}
+			{{$args := parseArgs 0 "Usage: `;quest show <User>`" ( carg "string" "" ) ( carg "userid" "" )}}
+			{{$user := .User}}
+			{{if ( $args.IsSet 0 )}}
+				{{$user = userArg ( $args.Get 0 )}}
+			{{end}}
+			{{if $data := ( dbGet $user.ID "Quest" ).Value}}
+				{{if eq ( kindOf $data true ) "struct"}}
+					{{sendMessage nil ( cembed $em )}}
+				{{else}}
+					{{sendMessage nil "You need to start your quest! Do `;quest start` to do so."}}
+				{{end}}
+			{{else}}
+				{{sendMessage nil "You don't have an active quest or have a quest pending review."}}
+			{{end}}
+		{{else if reFind `(?i)done` ( index .CmdArgs 0 )}}
+			{{$args := parseArgs 3 "Usage: `;quest done <User> <No of Objectives>`" ( carg "string" "" ) ( carg "userid" "" ) ( carg "int" "" )}}
+				{{$artifactRewards := cslice 
+					( sdict "id" "talon" "info" ( sdict "name" "Argentavis Talon" "icon" "https://static.wikia.nocookie.net/arksurvivalevolved_gamepedia/images/6/64/Argentavis_Talon.png/revision/latest?cb=20150615094355" ) )
+					( sdict "id" "blubber" "info" ( sdict "name" "Basilosaurus Blubber" "icon" "https://static.wikia.nocookie.net/arksurvivalevolved_gamepedia/images/9/98/Basilosaurus_Blubber.png/revision/latest?cb=20170630161418" ) )
+					( sdict "id" "tooth" "info" ( sdict "name" "Megalodon Tooth" "icon" "https://static.wikia.nocookie.net/arksurvivalevolved_gamepedia/images/6/6f/Megalodon_Tooth.png/revision/latest?cb=20150615092017" ) )
+					( sdict "id" "skin" "info" ( sdict "name" "Sarcosuchus Skin" "icon" "https://static.wikia.nocookie.net/arksurvivalevolved_gamepedia/images/c/c2/Sarcosuchus_Skin.png/revision/latest?cb=20170630161512" ) )
+					( sdict "id" "vertebra" "info" ( sdict "name" "Sauropod Vertebra" "icon" "https://static.wikia.nocookie.net/arksurvivalevolved_gamepedia/images/6/66/Sauropod_Vertebra.png/revision/latest?cb=20150615092045" ) )
+					( sdict "id" "claws" "info" ( sdict "name" "Therizino Claws" "icon" "https://static.wikia.nocookie.net/arksurvivalevolved_gamepedia/images/0/0a/Therizino_Claws.png/revision/latest?cb=20170630161543" ) )
+					( sdict "id" "tentacle" "info" ( sdict "name" "Tusoteuthis Tentacle" "icon" "https://static.wikia.nocookie.net/arksurvivalevolved_gamepedia/images/1/10/Tusoteuthis_Tentacle.png/revision/latest?cb=20161224094944" ) )
+					( sdict "id" "arm" "info" ( sdict "name" "Tyrannosaurus Arm" "icon" "https://static.wikia.nocookie.net/arksurvivalevolved_gamepedia/images/2/2f/Tyrannosaurus_Arm.png/revision/latest?cb=20150615092036" ) )
+					( sdict "id" "leech" "info" ( sdict "name" "Leech Blood" "icon" "https://static.wikia.nocookie.net/arksurvivalevolved_gamepedia/images/e/e3/Leech_Blood.png/revision/latest?cb=20160606192157" ) )
+					( sdict "id" "horn" "info" ( sdict "name" "Woolly Rhino Horn" "icon" "https://static.wikia.nocookie.net/arksurvivalevolved_gamepedia/images/3/38/Woolly_Rhino_Horn.png/revision/latest?cb=20160410175521" ) )
+					( sdict "id" "paste" "info" ( sdict "name" "Achatina Paste" "icon" "https://static.wikia.nocookie.net/arksurvivalevolved_gamepedia/images/0/03/Cementing_Paste.png/revision/latest?cb=20180801020251" ) )
+					( sdict "id" "gel" "info" ( sdict "name" "Angler Gel" "icon" "https://static.wikia.nocookie.net/arksurvivalevolved_gamepedia/images/7/75/AnglerGel.png/revision/latest?cb=20180801015710" ) )
+					( sdict "id" "polymer" "info" ( sdict "name" "Organic Polymer" "icon" "https://static.wikia.nocookie.net/arksurvivalevolved_gamepedia/images/1/13/Organic_Polymer.png/revision/latest?cb=20160424034337" ) )
+					( sdict "id" "dodo" "info" ( sdict "name" "Dodo Feathers" "icon" "https://static.wikia.nocookie.net/arksurvivalevolved_gamepedia/images/6/69/Dodo_Feather_%28Mobile%29.png/revision/latest?cb=20190124194123" ) )
+					( sdict "id" "husk" "info" ( sdict "name" "Neura Husk" "icon" "https://static.wikia.nocookie.net/arksurvivalevolved_gamepedia/images/2/2f/Neura_Husk_%28Mobile%29.png/revision/latest?cb=20181225201635" ) )
+				}}
+				{{if ( in ( split ( index ( split ( exec "viewperms" ) "\n" ) 2 ) ", " ) "Administrator" )}}
+					{{if $db := ( dbGet .User.ID "Quest" ).Value}}
+						{{if eq ( kindOf $db true ) "struct"}}
+							{{$inv := (dbGet .User.ID "inv").Value}}
+							{{if eq 3 ( $args.Get 2 )}}
+								{{$artifactSel := slice ( shuffle $artifactRewards ) 10}}
+								{{$}}
+							{{else if eq 2 ( $args.Get 2 )}}
+								{{$artifactSel := slice ( shuffle $artifactRewards ) 12}}
+							{{else if eq 1 ( $args.Get 2 )}}
+								{{$artifactSel := slice ( shuffle $artifactRewards ) 14}}
+							{{else}}
+								{{}}
+							{{end}}
+		{{else}}
+			{{$desc := "\n\n➼ `;quest start`\n <:SubMenu:944115521794764800>Use this command to start a quest when you want to! Use a locker map to get started.\n\n➼ `;quest show`\n <:SubMenu:944115521794764800>Use this command to check on your quest status!"}}
+			{{if ( in ( split ( index ( split ( exec "viewperms" ) "\n" ) 2 ) ", " ) "Administrator" )}}
+				{{$desc = print $desc "\n\n➼ `;quest done <User> <No of Objectives>`\n <:SubMenu:944115521794764800>Use this command to give out rewards!"}}
+			{{end}}
+			{{sendMessage nil ( cembed
+				"title" "Quest Help Menu"
+				"author" (sdict "name" .User.Username "icon_url" (.User.AvatarURL "256"))
+				"color" 0x2e3137
+    			"description" $desc
+			)}}
+		{{end}}
+	{{end}}
+{{else}}
+	{{sendMessage nil ( complexMessage "content" .User.Mention "embed" ( cembed
+		"title" "Quest Over!"
+		"description" "```yaml\nYour quest times has finished! Please stop sending replies here!\nAn admin will get to reviewing your quest ASAP!```"
+		"color" 0x2e3137 ) )}}
+{{end}}

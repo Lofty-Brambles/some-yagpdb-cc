@@ -4,7 +4,7 @@
 	Repository: https://github.com/Lofty-Brambles/some-yagpdb-cc */}}
 
 {{if not .ExecData}}
- 
+
 {{$args := parseArgs 1 "Usage: `;use <Item ID>`" (carg "string" "")}}
 {{$inv := (dbGet .User.ID "inv").Value}}{{$key := ($args.Get 0|lower)}}{{$invCopy := $inv}}
 {{if not ($inv.HasKey $key)}}
@@ -48,18 +48,22 @@
 		{{sendMessage nil "<a:Tick:947957018675781662> | Your bank quota was increased! Check it with `;bank`"}}
 	{{end}}
 	{{if eq $key "map"}}
-		{{sendMessage nil "🚧 | This item is still under construction for a later feature. Your balance has been refunded, meanwhile."}}
-		{{dbSet .User.ID "bal" (add (dbGet .User.ID "bal").Value 2000)}}
+		{{$info := createTicket .User.ID "🗺  | Quest |  🗺"}}
+		{{sleep 1}}
+		{{exec "clean 1"}}
+		{{$temp := (dbGet 123 "quests").Value}}
+		{{$temp.Set (str .User.ID) $info}}
+		{{dbSet 123 "quests" $temp}}
 	{{end}}
 {{end}}
- 
+
 {{else}}
- 
+
 	{{if eq .ExecData.key "clover"}}
 		{{$misc := (dbGet .ExecData.user "misc").Value}}{{$silent := $misc.Del .ExecData.entry}}{{dbSet .ExecData.user "misc" $misc}}
 	{{end}}
 	{{if eq .ExecData.key "hammer"}}
 		{{$dash := (dbGet .ExecData.user "dash").Value}}{{$set := $dash.Set "brate" (div ($dash.Get "brate") 10)}}{{dbSet .ExecData.user "dash" $dash}}
 	{{end}}
- 
+
 {{end}}
