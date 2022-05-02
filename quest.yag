@@ -1,0 +1,53 @@
+{{/*Trigger type: Regex; Trigger: \A(?i);\s*q(?:uest)?(?: +|\z) */}}
+{{if not .ExecData}}
+	{{if .CmdArgs}}
+		{{if reFind `(?i)start` ( index .CmdArgs 0 )}}
+			{{if $db := ( dbGet .User.ID "Quest" ).Value}}
+				{{if eq $db "Pending"}}
+					{{$quests := cslice
+						( sdict "diff" "Easy" "title" "" "desc" "" "img" "" "time" "" )
+					}}
+					{{$select := index ( shuffle $quests ) 0}}
+					{{$time := ( $select.Get "time" | toInt | add currentTime.Unix )}}
+					{{$em := sdict 
+						"title" ( print ( $select.Get "title" ) " | [" ( $select.Get "diff" ) " quest]" )
+						"description" ( print "> __🌎 | The Quest | 🌎__\n" ( $select.Get "desc" ) "\n> **The Time left:** <t:" $time ":R>\nGood Luck!" )
+						"footer" ( sdict "text" "REMEMBER to send a screenshot for completing the quest!" )
+						"image" ( sdict "url" ( $select.Get "img" ) )
+						"color" 0x2e3137
+					}}
+					{{sendMessage nil ( cembed $em )}}
+					{{dbSetExpire .User.ID "Quest" $em ( $select.Get "time" | toInt )}}
+					{{execCC .CCID nil ( $select.Get "time" | toInt ) (sdict "ID" .User.ID)}}
+				{{else}}
+					{{sendMessage nil ( print .User.Mention ", you have a quest active!\nGo to your quest channel and do `;quest show` to view it again." )}}
+				{{end}}
+			{{else}}
+				{{sendMessage nil ( print .User.Mention ", you either have a quest, pending review, or need to get one!\nYou can get a quest from a quest map from the shop!")}}
+			{{end}}
+		{{else if reFind `(?i)show` ( index .CmdArgs 0 )}}
+			{{$args := parseArgs 0 "Usage: `;quest <User>`" ( carg "userid" "" )}}
+			{{$user := .User}}
+			{{if ( $args.IsSet 0 )}}
+				{{$user = userArg ( $args.Get 0 )}}
+			{{end}}
+			{{if $data := ( dbGet $user.ID "Quest" ).Value}}
+				{{if eq ( kindOf $data true ) "struct"}}
+					{{sendMessage nil ( cembed $em )}}
+				{{else}}
+					{{sendMessage nil "You need to start your quest! Do `;quest start` to do so."}}
+				{{end}}
+			{{else}}
+				{{sendMessage nil "You don't have an active quest or have a quest pending review."}}
+			{{end}}
+		{{else if reFind `(?i)done` ( index .CmdArgs 0 )}}
+			{{$args := parseArgs 2 "Usage: `;quest done <User> <No of subquests>`" ( carg "string" "" ) ( carg "userid" "" ) ( carg "int" "" )}}
+			{{if ( $args.IsSet 1 )}}
+				{{}}// Admin cmd, add an exec check and add rewards
+		{{else}}
+			{{}}// Help menu
+		{{end}}
+	{{end}}
+{{else}}
+	{{}}// schedule admin lock
+{{end}}

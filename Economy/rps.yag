@@ -1,0 +1,70 @@
+{{/* Recommend trigger : Regex : `\A-r(?:ock)?p(?:aper)?s(?:scissors)?`
+    Copyright (c) 2021-Today Spongerooski
+    Repository: https://github.com/Spongerooski/yagpdb-cc
+    Modfied by Lofty Brambles.
+    Repository: https://github.com/Lofty-Brambles/some-yagpdb-cc*/}}
+
+{{/* you can change the rock paper and scissors emojis to the ones you want */}}
+{{$rockemoji := "<:Stone:965507430219927665>"}}{{/* emoji that you would like to use for rock */}}
+{{$paperemoji := "🗞"}}{{/* emoji that you would like to use for paper */}}
+{{$scissorsemoji := "✂️"}}{{/* emoji that you would like to use for scissors */}}
+{{$winningmessage := "<a:yay:965505584310939648> | You won!"}}{{/* message when the person wins */}}
+{{$losingmessage := "<a:CH_CatCry:951482071858151454> | You lost"}}{{/* message when the person loses */}}
+{{$tiemessage := "<:waiting:954326638995320842> | There was a Tie"}}{{/* message when the match is tied */}}
+{{$color := (randInt 1 999999)}}{{/* color for the embed */}}
+ 
+{{/* ACTUAL CODE */}}
+{{if $matches := reFindAllSubmatches `(?i)(rock|paper|scissors)` .StrippedMsg}}
+	{{$player := ""}}
+	{{if reFind `(?i)rock` (index $matches 0 1)}}
+		{{$player = $rockemoji}}
+	{{else if reFind `(?i)paper` (index $matches 0 1)}}
+		{{$player = $paperemoji}}
+	{{else if reFind `(?i)scissors` (index $matches 0 1)}}
+		{{$player = $scissorsemoji}}
+	{{end}}
+	{{$win := false}}
+	{{$the := cslice $scissorsemoji $paperemoji $scissorsemoji $rockemoji $paperemoji $rockemoji}}
+	{{$pick := (index $the (randInt (len $the)))}}
+	{{if and (eq $player $scissorsemoji) (eq $pick $paperemoji)}}
+		{{$win = true}}
+	{{else if and (eq $player $rockemoji) (eq $pick $scissorsemoji)}}
+		{{$win = true}}
+	{{else if and (eq $player $paperemoji) (eq $pick $rockemoji)}}
+		{{$win = true}}
+	{{else if eq $player $pick}}
+		{{$win = false}}
+	{{end}}
+	{{$embed := (sdict "description" (print "\n`»` You chose " $player "\n`»` The bot chose " $pick) "color" $color)}}
+	{{if $inp := (reFind `\d+` .StrippedMsg | toInt)}}
+		{{if $db := (toInt (dbGet .User.ID "bal").Value)}}
+			{{if ge $db $inp}}
+				{{if $win}}
+					{{$embed.Set "title" $winningmessage}}
+					{{$embed.Set "footer" (sdict "text" (print "You earned " $inp ". Your new balance is " (toInt $inp | dbIncr .User.ID "bal") "."))}}
+				{{else}}
+					{{if eq $player $pick}}
+						{{$embed.Set "title" $tiemessage}}
+					{{else if not (eq $player $pick)}}
+						{{$embed.Set "title" $losingmessage}}
+						{{$bal := sub $db $inp}}
+						{{if lt $bal 0}}
+							{{$bal = 0}}
+						{{end}}
+						{{dbSet .User.ID "bal" $bal}}
+						{{$embed.Set "footer" (sdict "text" (print "You lost " $inp ". Your new balance is " $bal "."))}}
+					{{end}}
+				{{end}}
+				{{sendMessage nil (cembed $embed)}}
+			{{else}}
+				{{sendMessage nil "Oh no! You do not have enough balance to bet that much!\nUsage : `;rps <Rock/Paper/Scissors> <Amount>`"}}
+			{{end}}
+		{{else}}
+			{{sendMessage nil "Oh no! You do not have any money!\nUsage : `;rps <Rock/Paper/Scissors> <Amount>`"}}
+		{{end}}
+	{{else}}
+		{{sendMessage nil "You need to bet an amount in order to play!\nUsage : `;rps <Rock/Paper/Scissors> <Amount>`"}}
+	{{end}}
+{{else}}
+Usage : `;rps <Rock/Paper/Scissors> <Amount>`
+{{end}}

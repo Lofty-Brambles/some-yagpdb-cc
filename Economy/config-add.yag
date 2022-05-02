@@ -1,4 +1,8 @@
-{{/* Trigger Type: Regex, Trigger: \A(?i)\s*;c(?:on)?fi?gadd(?: +|\z) */}}
+{{/* Trigger Type: Regex, Trigger: \A(?i)\s*;c(?:on)?fi?gadd(?: +|\z)
+	Copyright: Lofty | Brambles, 2021
+	License: MIT
+	Repository: https://github.com/Lofty-Brambles/some-yagpdb-cc */}}
+
 {{/* Adds the replies to the ;con and ;cave commands */}}
 {{$conGoodReplies := cslice
  "You managed to find someone who just finished a cave expedition and rob him at gunpoint."
